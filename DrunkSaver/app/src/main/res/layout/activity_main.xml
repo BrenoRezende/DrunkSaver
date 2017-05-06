@@ -6,11 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.brezend.drunksaver.MainActivity">
 
+
     <Button
         android:id="@+id/sendMessageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="I'm drunk, save me!"
+        android:layout_height="222dp"
+        android:background="@drawable/button"
+        android:onClick="sendMessage"
+        android:text="@string/send_message"
+        android:textColor="#ffffff"
+        android:layout_width="227dp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -18,7 +22,5 @@
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:onClick="sendMessage"/>
-
+        app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>

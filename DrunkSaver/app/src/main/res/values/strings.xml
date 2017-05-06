@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">DrunkSaver</string>
+    <string name="app_name">Drunk Saver</string>
+    <string name="send_message">I am drunk, call me a bro!</string>
 </resources>

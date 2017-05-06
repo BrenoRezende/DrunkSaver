@@ -9,8 +9,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -41,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             PackageInfo info = pm.getPackageInfo("com.whatsapp", PackageManager.GET_META_DATA);
 
             String gmaps = "http://maps.google.com/maps?q=" + this.location.getLatitude() + "," + this.location.getLongitude();
-            String message = "To muito bêbado, venha aqui plmmds!!!1 - DrunkSaver APP";
+            String message = "To muito bêbado, venha aqui plmmds!!!1! - DrunkSaver APP";
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, gmaps + "\n *"+message+"*");
