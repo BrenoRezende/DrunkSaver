@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Drunk Saver</string>
-    <string name="send_message">I am drunk, call me a bro!</string>
+    <string name="send_message">I am drunk, call my friends!</string>
+    <string name="message_to_send">I am too drunk, come here plx!!1!!</string>
+    <string name="whatsapp_not_installed">WhatsApp is not installed. Please, install it.</string>
+    <string name="location_permission_failed">This app needs to access your location to works properly. Please, grant location permission and turn on the device\'s GPS</string>
+    <string name="message_send_success">Message sent successfully!</string>
+    <string name="message_send_fail">Error sending message. Please, try again.</string>
+    <string name="check_device_gps">Please, check if the device\'s GPS is turned on.</string>
+
+    <string name="turn_on_location">No location permission was granted to this app. Do you want to grant it now?</string>
+    <string name="sure">Yes</string>
+    <string name="cancel">No</string>
 </resources>
