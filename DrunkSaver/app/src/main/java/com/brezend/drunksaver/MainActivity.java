@@ -16,13 +16,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private static final int WHATSAPP_REQUEST = 1;
     private static final int MY_PERMISSIONS_REQUEST = 10;
     private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
     private Location location;
 
     @Override
@@ -31,6 +34,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
 
         permissionsRequest();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            startLocationUpdate();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mGoogleApiClient != null) {
+            stopLocationUpdate();
+        }
     }
 
     public void sendMessage(View view) {
@@ -42,12 +63,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             if (this.location != null) {
                 gmaps = "http://maps.google.com/maps?q=" + this.location.getLatitude() + "," + this.location.getLongitude();
             } else {
-                if (!shouldAskPermission()) {
-                    Toast.makeText(this, getString(R.string.check_device_gps), Toast.LENGTH_LONG).show();
-                }
+                Toast.makeText(this, getString(R.string.location_not_determined), Toast.LENGTH_LONG).show();
             }
 
-            String message = getString(R.string.message_to_send) + " - " + getString(R.string.app_name);
+            String message = getString(R.string.message_to_send) + " - " + getString(R.string.app_name) + " App";
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, gmaps + "\n *"+message+"*");
@@ -76,24 +95,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if (shouldAskPermission())  {
 
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
-                    ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    openPermissionFragment();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[] {
-                                Manifest.permission.ACCESS_FINE_LOCATION,
-                                Manifest.permission.ACCESS_COARSE_LOCATION },
-                        MY_PERMISSIONS_REQUEST);
-            }
+            ActivityCompat.requestPermissions(this, new String[] {
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION },
+                    MY_PERMISSIONS_REQUEST);
+
         } else {
             callConnection();
         }
 
-    }
-
-    public void openPermissionFragment() {
-        PermissionFragment permissionFragment = new PermissionFragment();
-        permissionFragment.show(getFragmentManager(), "Permission");
     }
 
     // Permissions request response
@@ -124,12 +134,37 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mGoogleApiClient.connect();
     }
 
+    private void initLocationRequest() {
+        this.mLocationRequest = new LocationRequest();
+        this.mLocationRequest.setInterval(2000);
+        this.mLocationRequest.setFastestInterval(1000);
+        this.mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
+
+    private void startLocationUpdate() {
+        initLocationRequest();
+        try {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, MainActivity.this);
+        } catch (SecurityException e) {
+        }
+    }
+
+    private void stopLocationUpdate() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, MainActivity.this);
+    }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         this.location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        if (location == null) {
+            Toast.makeText(this, getString(R.string.check_device_gps), Toast.LENGTH_LONG);
+        }
+
+        startLocationUpdate();
     }
 
     // Check if permission is granted
@@ -149,5 +184,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        this.location = location;
     }
 }

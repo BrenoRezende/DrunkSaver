@@ -5,10 +5,7 @@
     <string name="whatsapp_not_installed">WhatsApp não está instalado. Por favor, instale-o.</string>
     <string name="location_permission_failed">Esse aplicativo precisa acessar sua localizacão para funcionar corretamente. Por favor, conceda permissão e ligue o GPS do dispositivo.</string>
     <string name="message_send_success">Mensagem enviada com sucesso!</string>
-    <string name="message_send_fail">Não foi possível enviar a mensagem. Por favor, tente novamente.</string>
+    <string name="message_send_fail">Mensagem não enviada. Por favor, tente novamente.</string>
+    <string name="location_not_determined">Não foi possível obter sua localização atual :(</string>
     <string name="check_device_gps">Por favor, verifique se o GPS do dispositivo está ligado.</string>
-
-    <string name="turn_on_location">Nenhuma permissão de localização foi concedida a este aplicativo. Deseja conceder agora?</string>
-    <string name="sure">Sim</string>
-    <string name="cancel">Não</string>
 </resources>
